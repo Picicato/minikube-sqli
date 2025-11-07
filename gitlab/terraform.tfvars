@@ -3,7 +3,7 @@ auth_url         = "http://openstack.ad.consultants-solutec.fr:5000/v3"
 region           = "RegionOne"
 project_name     = "IC11"
 username         = "awang"
-password         = "1133e4f5c557C!delp"
+password         = ""
 user_domain_name = "consultants-solutec"
 # SSH Key Pair
 ssh_public_key = "~/.ssh/id_rsa.pub"
