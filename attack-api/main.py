@@ -1,5 +1,5 @@
-from  fastapi import FastAPI
-from prometheus_client import Counter, generate_lastest, CONTENT_TYPE_LATEST
+from fastapi import FastAPI
+from prometheus_client import Counter, generate_latest, CONTENT_TYPE_LATEST
 from starlette.responses import Response
 
 app = FastAPI()
@@ -18,5 +18,5 @@ async def simulate_attack():
 
 @app.get("/metrics")
 async def metrics():
-	data = generate_lastest()
-	return Response(content=data, media_type=CONTENT_TYPE_LASTEST)
+	data = generate_latest()
+	return Response(content=data, media_type=CONTENT_TYPE_LATEST)
