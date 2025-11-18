@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head><title>Login (vulnerable)</title></head>
+    <body>
+        <h1>Login Page (intentionally vulnerable)</h1>
+        <form method="POST" action="/login">
+            <label>username</label><input name="username" /><br />
+            <label>password</label><input name="password" /><br />
+            <button type="submit">Login</button>
+        </form>
+
+        <p>Test payload example for SQLi: <code>' OR 1=1 --</code></p>
+    </body>
+</html>

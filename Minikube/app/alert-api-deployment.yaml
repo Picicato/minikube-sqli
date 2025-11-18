@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alert-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alert-api
+  template:
+    metadata:
+      labels:
+        app: alert-api
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "5000"
+    spec:
+      containers:
+      - name: alert-api
+        image: alert-api:latest  # Utilise le nom local 
+        imagePullPolicy: Never   # IMPORTANT : Empêche Kubernetes de chercher sur Docker Hub
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: alert-api
+spec:
+  selector:
+    app: alert-api
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: NodePort
