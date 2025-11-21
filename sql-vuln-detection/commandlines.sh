@@ -9,6 +9,7 @@ docker build -t sqli-detector:latest .
 minikube kubectl -- -n sqli-lab port-forward svc/vuln-app 5000:80 &
 minikube kubectl -- -n sqli-lab port-forward svc/postgres 5432:5432 &
 minikube kubectl -- -n sqli-lab port-forward svc/sqli-detector 8000:8000 &
+minikube kubectl -- -n sqli-lab port-forward svc/kube-prom-stack-grafana 3000:80 &
 
 # To access the Postgres database from within the cluster
 minikube kubectl -- exec -n sqli-lab -it deploy/postgres -- psql -U test -d test
@@ -25,3 +26,6 @@ terraform apply -target=module.sqli_detector -auto-approve
 
 # Test the SQLi detector by sending a payload
 curl -X POST http://localhost:8000/log -d '{"payload": "DROP"}' -H "Content-Type: application/json"
+
+# Retrieve Grafana admin password
+minikube kubectl -- get secret kube-prom-stack-grafana -n sqli-lab -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
