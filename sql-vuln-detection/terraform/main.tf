@@ -21,17 +21,14 @@ module "sqli_detector" {
   depends_on = [module.namespace, module.app]
 }
 
-module "monitoring_namespace" {
-  source    = "./modules/namespace"
-  namespace = "monitoring"
+module "monitoring" {
+  source     = "./modules/monitoring"
+  namespace  = module.namespace.name
+  depends_on = [module.namespace, module.sqli_detector]
 }
 
-module "monitoring" {
-  source    = "./modules/monitoring"
-  namespace = module.namespace.name
-
-  depends_on = [
-    module.namespace,
-    module.sqli_detector
-  ]
+module "monitoring_addons" {
+  source     = "./modules/monitoring_addons"
+  namespace  = module.namespace.name
+  depends_on = [module.monitoring]
 }

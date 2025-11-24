@@ -9,7 +9,8 @@ docker build -t sqli-detector:latest .
 minikube kubectl -- -n sqli-lab port-forward svc/vuln-app 5000:80 &
 minikube kubectl -- -n sqli-lab port-forward svc/postgres 5432:5432 &
 minikube kubectl -- -n sqli-lab port-forward svc/sqli-detector 8000:8000 &
-minikube kubectl -- -n sqli-lab port-forward svc/kube-prom-stack-grafana 3000:80 &
+minikube kubectl -- -n sqli-lab port-forward svc/kube-prometheus-stack-grafana 3000:80 &
+minikube kubectl -- -n sqli-lab port-forward svc/kube-prometheus-stack-prometheus 9090:9090 &
 
 # To access the Postgres database from within the cluster
 minikube kubectl -- exec -n sqli-lab -it deploy/postgres -- psql -U test -d test
@@ -22,7 +23,15 @@ minikube kubectl -- delete deployment sqli-detector -n sqli-lab
 minikube kubectl -- delete service sqli-detector -n sqli-lab
 
 # Deploy the SQLi detector module
-terraform apply -target=module.sqli_detector -auto-approve
+terraform apply -target=module.namespace \
+               -target=module.postgres \
+               -target=module.app \
+               -target=module.sqli_detector \
+               -target=module.monitoring \
+               --auto-approve
+
+terraform apply -target=module.monitoring_addons --auto-approve
+
 
 # Test the SQLi detector by sending a payload
 curl -X POST http://localhost:8000/log -d '{"payload": "DROP"}' -H "Content-Type: application/json"

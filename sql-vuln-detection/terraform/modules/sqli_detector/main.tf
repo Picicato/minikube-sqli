@@ -49,9 +49,12 @@ resource "kubernetes_service" "sqli_detector" {
       app = "sqli-detector"
     }
     port {
+      name        = "8000"
       port        = 8000
       target_port = 8000
+      protocol    = "TCP"
     }
+
     type = "ClusterIP"
   }
 }
