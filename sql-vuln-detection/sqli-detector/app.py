@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, make_response
 from prometheus_client import Counter, generate_latest, CONTENT_TYPE_LATEST
 import re
 
@@ -33,11 +33,13 @@ def log():
 
 @app.route("/metrics")
 def metrics():
-    return generate_latest(), 200, {"Content-Type": CONTENT_TYPE_LATEST}
+    resp = make_response(generate_latest())
+    resp.headers["Content-Type"] = CONTENT_TYPE_LATEST
+    return resp
 
 @app.route("/health")
 def health():
-    return "ok", 200
+    return "Ok", 200
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)

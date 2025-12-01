@@ -42,14 +42,18 @@ resource "kubernetes_service" "sqli_detector" {
   metadata {
     name      = "sqli-detector"
     namespace = var.namespace
+    labels = {
+      app = "sqli-detector"
+    }
   }
 
   spec {
     selector = {
       app = "sqli-detector"
     }
+
     port {
-      name        = "8000"
+      name        = "metrics"
       port        = 8000
       target_port = 8000
       protocol    = "TCP"

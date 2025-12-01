@@ -16,7 +16,7 @@ resource "kubernetes_manifest" "sqli_detector_servicemonitor" {
         }
       }
       endpoints = [{
-        port     = "8000"
+        port     = "metrics"
         path     = "/metrics"
         interval = "10s"
       }]
