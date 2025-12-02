@@ -1,9 +1,5 @@
-#!/bin/bash
-
-# Build the Docker images
+# define the shell
 eval $(minikube docker-env)
-docker build -t vuln-app:latest .
-docker build -t sqli-detector:latest .
 
 # Port-forwarding for the vulnerable app and Postgres database
 minikube kubectl -- -n sqli-lab port-forward svc/vuln-app 5000:80 &
@@ -21,17 +17,6 @@ SELECT * FROM users;
 # Clean up existing SQLi detector deployment
 minikube kubectl -- delete deployment sqli-detector -n sqli-lab
 minikube kubectl -- delete service sqli-detector -n sqli-lab
-
-# Deploy the SQLi detector module
-terraform apply -target=module.namespace \
-               -target=module.postgres \
-               -target=module.app \
-               -target=module.sqli_detector \
-               -target=module.monitoring \
-               --auto-approve
-
-terraform apply -target=module.monitoring_addons --auto-approve
-
 
 # Test the SQLi detector by sending a payload
 curl -X POST http://localhost:8000/log -d '{"payload": "DROP"}' -H "Content-Type: application/json"

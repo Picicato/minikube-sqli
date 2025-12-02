@@ -1,14 +1,64 @@
 <!DOCTYPE html>
-<html>
-    <head><title>Login (vulnerable)</title></head>
-    <body>
-        <h1>Login Page</h1>
-        <form method="POST" action="/login">
-            <label>username</label><input type="text"  name="username" /><br />
-            <label>password</label><input type="password" name="password" /><br />
-            <button type="submit">Login</button>
-        </form>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Login (vulnerable)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="bg-grid"></div>
 
-        <p>Test payload example for SQLi: <code>' OR 1=1 --</code></p>
-    </body>
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>Vulnerable Login Portal</h1>
+                <p class="subtitle">Demo d’injection SQL – environnement de test</p>
+            </div>
+
+            <form method="POST" action="/login" class="login-form">
+                <div class="form-group">
+                    <label for="username">Nom d’utilisateur</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="admin"
+                        autocomplete="off"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="••••••••"
+                    />
+                </div>
+
+                <button type="submit" class="btn-primary">Se connecter</button>
+            </form>
+
+            <div class="payload-box">
+                <h2>Payload de test (SQLi)</h2>
+                <p>
+                    Essayez le payload suivant dans le champ <strong>username</strong> :
+                </p>
+                <pre><code>' OR 1=1 --</code></pre>
+                <p class="warning">
+                    ⚠️ Attention : ceci est une démonstration pour un projet /
+                    environnement de test. Ne jamais utiliser ce genre de vulnérabilité
+                    en conditions réelles.
+                </p>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <span class="status-dot"></span>
+            <span>Status: <strong>VULNERABLE</strong></span>
+        </footer>
+    </div>
+</body>
 </html>
