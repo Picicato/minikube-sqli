@@ -69,7 +69,7 @@ Each module is independently deployable and reusable.
 * kubectl
 * Helm
 
-Start de project:
+Start the project:
 ~~~bash
 ./start.sh
 ~~~
