@@ -1,9 +1,8 @@
 # 📌 SQL Injection Detection Pipeline on Kubernetes (Minikube)
 ## 🔧 Prerequisites
 * Minikube
-* Terraform 1.3+
+* Terraform 1.14.0
 * Docker
-* kubectl
 * Helm
 
 Start the project:
