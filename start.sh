@@ -2,7 +2,7 @@
 set -e
 
 minikube start --container-runtime=docker --driver=docker --memory=3072 --cpus=2 --disk-size=15g
-
+eval $(minikube docker-env)
 # Build docker images
 docker build -t vuln-app:latest ./vuln-web
 docker build -t sqli-detector:latest ./sqli-detector
