@@ -1,3 +1,6 @@
+# Add uour user to the 'docker' group
+sudo usermod -aG docker $USER && newgrp docker
+
 # define the shell
 eval $(minikube docker-env)
 
@@ -22,4 +25,4 @@ minikube kubectl -- delete service sqli-detector -n sqli-lab
 curl -X POST http://localhost:8000/log -d '{"payload": "DROP"}' -H "Content-Type: application/json"
 
 # Retrieve Grafana admin password
-minikube kubectl -- get secret kube-prom-stack-grafana -n sqli-lab -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+minikube kubectl -- get secret kube-prometheus-stack-grafana -n sqli-lab -o jsonpath="{.data.admin-password}" | base64 --decode ; echo

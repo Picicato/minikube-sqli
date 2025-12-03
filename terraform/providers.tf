@@ -5,7 +5,7 @@ terraform {
       version = "~> 2.38.0"
     }
   }
-  required_version = "~> 1.13.0"
+  required_version = "~> 1.14.0"
 }
 
 provider "kubernetes" {

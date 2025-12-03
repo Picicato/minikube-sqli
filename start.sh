@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-minikube start --container-runtime=docker --driver=docker
+minikube start --container-runtime=docker --driver=docker --memory=3072 --cpus=2 --disk-size=15g
 
 # Build docker images
 docker build -t vuln-app:latest ./vuln-web
