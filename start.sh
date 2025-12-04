@@ -16,9 +16,9 @@ terraform apply -target=module.namespace \
                -target=module.app \
                -target=module.sqli_detector \
                -target=module.monitoring \
-               --auto-approve
+               -auto-approve
 
-terraform apply -target=module.monitoring_addons --auto-approve
+terraform apply -target=module.monitoring_addons -auto-approve
 
 # Port forwarding
 minikube kubectl -- -n sqli-lab port-forward svc/vuln-app 5000:80 &
