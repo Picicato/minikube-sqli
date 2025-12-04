@@ -17,6 +17,9 @@ minikube kubectl -- exec -n sqli-lab -it deploy/postgres -- psql -U test -d test
 \dt
 SELECT * FROM users;
 
+# Restart pod
+minikube kubectl -- -n sqli-lab rollout restart deploy/sqli-detector
+
 # Clean up existing SQLi detector deployment
 minikube kubectl -- delete deployment sqli-detector -n sqli-lab
 minikube kubectl -- delete service sqli-detector -n sqli-lab
@@ -26,3 +29,4 @@ curl -X POST http://localhost:8000/log -d '{"payload": "DROP"}' -H "Content-Type
 
 # Retrieve Grafana admin password
 minikube kubectl -- get secret kube-prometheus-stack-grafana -n sqli-lab -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+

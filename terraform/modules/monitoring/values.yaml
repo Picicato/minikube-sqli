@@ -8,7 +8,7 @@ additionalScrapeConfigs:
 alertmanager:
   config:
     global:
-      resolve_timeout: 5m
+      resolve_timeout: 1m
     route:
       receiver: discord-sqli
       routes:
@@ -22,13 +22,14 @@ alertmanager:
             send_resolved: true
             username: "SQLi Sentinel"
             icon_emoji: ":rotating_light:"
-            title: "{{ .CommonLabels.alertname }} — {{ .CommonLabels.severity | toUpper }}"
-            text: "*Status:* {{ .Status | toUpper }}\n*Namespace:* {{ .CommonLabels.namespace }}\n*Alerts:*\n{{ range .Alerts }}• *{{ .Labels.pod | default \"N/A\" }}* — {{ .Annotations.summary }}\n  {{ .Annotations.description }}\n{{ end }}"
-            title_link: "{{ .ExternalURL }}/#/alerts?receiver=discord-sqli"
-            footer: "Prometheus › {{ .ExternalURL }}"
-            mrkdwn_in: ["text"]
             attachments:
-              - color: '{{ if eq (or .CommonLabels.severity "") "critical" }}#e11d48{{ else if eq (or .CommonLabels.severity "") "warning" }}#f59e0b{{ else }}#3b82f6{{ end }}'
+              - color: '{{ if eq .Status "resolved" }}#10b981{{ else if eq (or .CommonLabels.severity "") "critical" }}#e11d48{{ else if eq (or .CommonLabels.severity "") "warning" }}#f59e0b{{ else }}#3b82f6{{ end }}'
+                title: "{{ .CommonLabels.alertname }} — {{ .Status | toUpper }}"
+                title_link: "{{ .ExternalURL }}/#/alerts?receiver=discord-sqli"
+                pretext: '{{ if eq .Status "resolved" }}:white_check_mark: RESOLVED — SQLi detector{{ else }}:rotating_light: *ALERT* SQLi detected{{ end }}'
+                text: '{{ if eq .Status "resolved" }}All clear. Counter reset or no recent detections.\n*Namespace:* {{ .CommonLabels.namespace | default "-" }}\n{{ range .Alerts }}• *Pod:* {{ .Labels.pod | default "N/A" }} (resolved)\n{{ end }}{{ else }}*Namespace:* {{ .CommonLabels.namespace | default "-" }}\n{{ range .Alerts }}• *Pod:* {{ .Labels.pod | default "N/A" }}\n  *Summary:* {{ .Annotations.summary }}\n  *Details:* {{ .Annotations.description }}\n{{ end }}{{ end }}'
+                footer: "Alertmanager • {{ .ExternalURL }}"
+                mrkdwn_in: ["pretext", "text", "title"]
 
 additionalPrometheusRulesMap:
   sqli-rules:
@@ -36,7 +37,7 @@ additionalPrometheusRulesMap:
       - name: sqli-detection
         rules:
           - alert: SQLInjectionDetected
-            expr: sql_injection_attempts_total > 0
+            expr: increase(sql_injection_attempts_total[5m]) > 0
             for: 5s
             labels:
               severity: critical
