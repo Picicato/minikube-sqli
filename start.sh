@@ -21,6 +21,8 @@ terraform apply -target=module.namespace \
 terraform apply -target=module.monitoring_addons -auto-approve
 
 # Port forwarding
-minikube kubectl -- -n sqli-lab port-forward svc/vuln-app 5000:80 &
 minikube kubectl -- -n sqli-lab port-forward svc/kube-prometheus-stack-grafana 3000:80 &
+minikube kubectl -- -n sqli-lab port-forward svc/vuln-app 5000:5000 &
+minikube kubectl -- -n sqli-lab port-forward svc/sqli-detector 8000:8000 &
 minikube kubectl -- -n sqli-lab port-forward svc/kube-prometheus-stack-prometheus 9090:9090 &
+#minikube kubectl -- -n sqli-lab port-forward svc/kube-prometheus-stack-alertmanager 9093:9093 &

@@ -5,7 +5,7 @@ sudo usermod -aG docker $USER && newgrp docker
 eval $(minikube docker-env)
 
 # Port-forwarding for the vulnerable app and Postgres database
-minikube kubectl -- -n sqli-lab port-forward svc/vuln-app 5000:80 &
+minikube kubectl -- -n sqli-lab port-forward svc/vuln-app 5000:5000 &
 minikube kubectl -- -n sqli-lab port-forward svc/postgres 5432:5432 &
 minikube kubectl -- -n sqli-lab port-forward svc/sqli-detector 8000:8000 &
 minikube kubectl -- -n sqli-lab port-forward svc/kube-prometheus-stack-grafana 3000:80 &

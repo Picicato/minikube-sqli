@@ -67,7 +67,7 @@ resource "kubernetes_service" "vuln_app" {
     }
 
     port {
-      port        = 80
+      port        = 5000
       target_port = 5000
     }
 

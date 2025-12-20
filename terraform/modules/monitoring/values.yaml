@@ -8,7 +8,7 @@ additionalScrapeConfigs:
 alertmanager:
   config:
     global:
-      resolve_timeout: 1m
+      resolve_timeout: 5m
     route:
       receiver: discord-sqli
       routes:
@@ -20,17 +20,9 @@ alertmanager:
         slack_configs:
           - api_url: "https://discord.com/api/webhooks/1446090054580568084/mLUaar9QmGEVostzwe-QofzGn6W8jDzHPimCSoPzAcMOiuAVfYFOrG6jjM1EkK1tQic1/slack"
             send_resolved: true
-            username: "SQLi Sentinel"
+            username: "Alertmanager"
             icon_emoji: ":rotating_light:"
-            attachments:
-              - color: '{{ if eq .Status "resolved" }}#10b981{{ else if eq (or .CommonLabels.severity "") "critical" }}#e11d48{{ else if eq (or .CommonLabels.severity "") "warning" }}#f59e0b{{ else }}#3b82f6{{ end }}'
-                title: "{{ .CommonLabels.alertname }} — {{ .Status | toUpper }}"
-                title_link: "{{ .ExternalURL }}/#/alerts?receiver=discord-sqli"
-                pretext: '{{ if eq .Status "resolved" }}:white_check_mark: RESOLVED — SQLi detector{{ else }}:rotating_light: *ALERT* SQLi detected{{ end }}'
-                text: '{{ if eq .Status "resolved" }}All clear. Counter reset or no recent detections.\n*Namespace:* {{ .CommonLabels.namespace | default "-" }}\n{{ range .Alerts }}• *Pod:* {{ .Labels.pod | default "N/A" }} (resolved)\n{{ end }}{{ else }}*Namespace:* {{ .CommonLabels.namespace | default "-" }}\n{{ range .Alerts }}• *Pod:* {{ .Labels.pod | default "N/A" }}\n  *Summary:* {{ .Annotations.summary }}\n  *Details:* {{ .Annotations.description }}\n{{ end }}{{ end }}'
-                footer: "Alertmanager • {{ .ExternalURL }}"
-                mrkdwn_in: ["pretext", "text", "title"]
-
+          
 additionalPrometheusRulesMap:
   sqli-rules:
     groups:
@@ -44,3 +36,4 @@ additionalPrometheusRulesMap:
             annotations:
               description: "SQL Injection detected by sqli-detector"
               summary: "SQL Injection attempt"
+              #pattern: "{{ $labels.pattern }}"

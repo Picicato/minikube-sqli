@@ -4,10 +4,11 @@ import re
 
 app = Flask(__name__)
 
-# Prometheus metric
+# Prometheus metric (labelled by matched pattern to keep metadata low-cardinality)
 sqli_counter = Counter(
     "sql_injection_attempts_total",
-    "Number of detected SQL injection attempts"
+    "Number of detected SQL injection attempts",
+    ["pattern"]
 )
 
 # SQLi patterns
@@ -26,8 +27,8 @@ def log():
 
     for p in PATTERNS:
         if re.search(p, payload, re.IGNORECASE):
-            sqli_counter.inc()
-            return {"detected": True}, 200
+            sqli_counter.labels(pattern=p).inc()
+            return {"detected": True, "pattern": p}, 200
 
     return {"detected": False}, 200
 
